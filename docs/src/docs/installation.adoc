@@ -5,7 +5,7 @@ The test framework and testing methodology for Grails has undergone several majo
 Unfortunately, this makes it impossible to have one plugin which is compatible with all prior versions.
 
 === Grails 5.0 or later
-`testImplementation "io.github.longwa:build-test-data:{version}"`
+`testImplementation "io.github.jdaugherty:build-test-data:{version}"`
 
 === Grails 4.0
 `testCompile "org.grails.plugins:build-test-data:4.0.0"`
@@ -19,10 +19,10 @@ Unfortunately, this makes it impossible to have one plugin which is compatible w
 NOTE: Version 3.0.x is required for Grails versions 3.0 through 3.2
 
 See the legacy Wiki documentation for details:
-https://github.com/longwa/build-test-data/wiki
+{projectUrl}/wiki
 
 === Grails 2.x
 See the legacy Wiki documentation for details:
-https://github.com/longwa/build-test-data/wiki
+{projectUrl}/wiki
 
 

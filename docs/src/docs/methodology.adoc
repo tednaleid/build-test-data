@@ -21,7 +21,7 @@ JUnit (and other xUnit) testing frameworks DRYed this up by having a "setUp" met
 Text fixtures allow you to use a DSL to define a named object graph.  You can then refer to this object graph in a test to have the fixtures instantiated and saved to the database before running your test.
 
 ==== Strengths
-* http://www.grails.org/Fixtures+Plugin[Fixture Plugin]
+* https://github.com/gpc/fixtures[Fixture Plugin]
 * Full control over values in every object in the object graph
 
 ==== Weaknesses

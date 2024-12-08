@@ -1,60 +1,72 @@
 buildscript {
     repositories {
         mavenLocal()
+        mavenCentral()
+        maven { url "https://repo.grails.org/grails/core/" }
         maven { url 'https://repo.grails.org/grails/libs-snapshots-local/' }
-        maven { url "https://repo.grails.org/grails/core" }
     }
     dependencies {
-        classpath "org.grails:grails-gradle-plugin:$grailsGradlePluginVersion"
-        classpath "org.grails:grails-docs:${project.ext.properties.grailsDocsVersion ?: grailsVersion}"
-        classpath 'io.github.groovylang.groovydoc:groovydoc-gradle-plugin:1.0.1'
+        classpath "org.grails:grails-gradle-plugin:${grailsGradlePluginVersion}"
+        classpath "org.grails:grails-docs:${grailsVersion}"
     }
 }
 
 plugins {
-    id "com.adarshr.test-logger" version "2.0.0"
+    id 'com.adarshr.test-logger' version '4.0.0'
 }
 
-repositories {
-    mavenLocal()
-    maven { url "https://repo.grails.org/grails/core" }
+allprojects {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        maven { url "https://repo.grails.org/grails/core" }
+    }
 }
 
 version project.projectVersion
-
-ext {
-    commonBuild = new File(project.rootDir, "gradle").absolutePath
-}
 
 subprojects {
     version project.projectVersion
 
     apply plugin:'groovy'
-    apply plugin:'com.adarshr.test-logger'
 
     ext {
-        userOrg = "grails"
         isGrailsPlugin = name.startsWith('grails-plugin')
         isBuildSnapshot = version.toString().endsWith("-SNAPSHOT")
     }
 
-    repositories {
-        mavenLocal()
-        maven { url "https://repo.grails.org/grails/core" }
+    project.compileJava.options.release = 17
+
+    apply plugin: 'com.adarshr.test-logger'
+    testlogger {
+        theme 'mocha'
+        showFullStackTraces true
+        showStandardStreams true
+        showPassedStandardStreams false
+        showSkippedStandardStreams false
+        showFailedStandardStreams true
     }
 
+    test.testLogging {
+        events "failed"
+        exceptionFormat "full"
+    }
 
-    sourceCompatibility = '1.8'
-    targetCompatibility = '1.8'
-
-    tasks.withType(Test) {
+    tasks.withType(Test).configureEach { testPlatform ->
         useJUnitPlatform()
-        testLogging {
-            events "failed"
-            exceptionFormat "full"
-        }
-        testlogger {
-            theme 'mocha'
+    }
+
+    if(project.name == 'build-test-data') {
+        apply plugin: "org.grails.grails-publish"
+        grailsPublish {
+            githubSlug = 'jdaugherty/build-test-data'
+            groupId = 'io.github.jdaugherty'
+            license {
+                name = 'Apache-2.0'
+            }
+            title = 'Build Test Data Grails Plugin'
+            desc = 'Enables the easy creation of test data by automatically satisfying common constraints'
+            developers = [longwa: 'Aaron Long', tednaleid: 'Ted Naleid', basejump: 'Joshua Burnett']
         }
     }
 }

@@ -16,20 +16,21 @@ def author = Author.build(name: 'Ted Naleid')
 def author = TestData.build(Author, name: 'Ted Naleid')
 ```
 
+=== Plugin Objectives
+
+* The definition of the domain objects under test should be next to the test code, this improves test comprehension.
+
+* You should only need to create those fields and objects that are pertinent to the test. Other test setup is noise that obfuscates the meaning of the test.
+
+* Tests should not be dependent on other tests, only on the code under test. Therefore, the same test data should not be used by multiple tests, this creates a strong coupling and leads to test fragility.
+
+* Changes to domain objects that do not affect the the code under test should not break the test.
+
 === Release History
-* January 6th, 2018 - 3.3.0.RC1
-** Support for Grails 3.3.x
-** Major cleanup and performance improvements
-** Trait based API
-* May 7th, 2018 - 3.3.0
-** Official release
-** Minor bug fixes from release candidate
-* June 1st, 2018 - 3.3.1
-** Support building of any nested `Validateable`
-** Fix misc data binding issues
-** Fix build issues with Basic to-many collections
-** Add 2nd `obj` parameter to TestDataConfig closures
-** Other minor bug fixes and cleanup
+* Grails 7+ - Build Test Data 6.x
+* Grails 5.x to 6.x - Build Test Data 5.x
+* Grails 3.3 to 4.x - Build Test Data 4.x
+* Grails 2.4.x to 3.2.x - Build Test Data 3.x
 
 
 

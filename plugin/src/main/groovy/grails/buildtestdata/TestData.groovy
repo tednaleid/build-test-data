@@ -19,7 +19,7 @@ class TestData {
 
     static InitialPropsResolver initialPropsResolver
 
-    static final Map builders = new HashMap<Class, DataBuilder>()
+    static final Map<Class, DataBuilder> builders = new HashMap<>()
     static final List<DataBuilderFactory> factories = []
     static{
         factories.add(new PersistentEntityDataBuilder.Factory())
