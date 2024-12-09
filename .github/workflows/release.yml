@@ -44,7 +44,7 @@ jobs:
         if: success()
         id: assemble
         run: ./gradlew assemble
-      - name: "📝 Generate secring file"
+      - name: "🔐 Generate secring file"
         env:
           SECRING_FILE: ${{ secrets.SECRING_FILE }}
         run: echo $SECRING_FILE | base64 -d > ${{ github.workspace }}/secring.gpg

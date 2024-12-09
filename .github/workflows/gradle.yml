@@ -28,13 +28,13 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
       - name: "🔨 Run Base Tests"
         run: ./gradlew check --continue
-      - name: "☄️ Upload Base Tests Results - alternativeConfig"
+      - name: "📤️ Upload Base Tests Results - alternativeConfig"
         if: ${{ always() }}
         uses: actions/upload-artifact@v4
         with:
           name: testreport-alternativeConfig-${{ matrix.java }}
           path: examples/alternativeConfig/build/reports/tests
-      - name: "☄️ Upload Base Tests Results - bookStore"
+      - name: "📤 Upload Base Tests Results - bookStore"
         if: ${{ always() }}
         uses: actions/upload-artifact@v4
         with:
