@@ -1,11 +1,11 @@
 buildscript {
-    repositories {
-        mavenLocal()
-        maven { url "https://repo.grails.org/grails/core" }
-    }
-    dependencies {
-        classpath "org.grails:grails-gradle-plugin:$grailsGradlePluginVersion"
-    }
+	repositories {
+		mavenLocal()
+		maven { url "https://repo.grails.org/grails/core" }
+	}
+	dependencies {
+		classpath "org.grails:grails-gradle-plugin:$grailsGradlePluginVersion"
+	}
 }
 
 group "org.grails.plugins"
@@ -14,31 +14,31 @@ apply plugin: "idea"
 apply plugin: "org.grails.grails-plugin"
 
 dependencies {
-    implementation "org.springframework.boot:spring-boot-starter-logging"
-    implementation "org.springframework.boot:spring-boot-autoconfigure"
-    implementation "dk.brics:automaton:1.12-4"
+	implementation "org.springframework.boot:spring-boot-starter-logging"
+	implementation "org.springframework.boot:spring-boot-autoconfigure"
+	implementation "dk.brics:automaton:1.12-4"
 
-    implementation "org.grails:grails-core"
-    implementation "org.grails:grails-gorm-testing-support"
-    implementation "org.grails:grails-databinding"
-    implementation "org.grails:grails-datastore-gorm"
-    implementation "org.grails:grails-console"
+	implementation "org.grails:grails-core"
+	implementation "org.grails:grails-gorm-testing-support"
+	implementation "org.grails:grails-databinding"
+	implementation "org.grails:grails-datastore-gorm"
+	implementation "org.grails:grails-console"
 
-    // So we can run 'grails' and/or 'grails test-app' inside build-test-data
-    profile "org.grails.profiles:web-plugin"
+	// So we can run 'grails' and/or 'grails test-app' inside build-test-data
+	profile "org.grails.profiles:web-plugin"
 
-    implementation "org.springframework.boot:spring-boot-starter-actuator"
-    implementation "org.springframework.boot:spring-boot-starter-tomcat"
-    implementation "org.grails:grails-web-boot"
+	implementation "org.springframework.boot:spring-boot-starter-actuator"
+	implementation "org.springframework.boot:spring-boot-starter-tomcat"
+	implementation "org.grails:grails-web-boot"
 
-    runtimeOnly 'org.apache.groovy:groovy-dateutil'
+	runtimeOnly 'org.apache.groovy:groovy-dateutil'
 
-    testImplementation "org.grails.plugins:hibernate5"
-    testImplementation "com.h2database:h2"
-    testImplementation "org.apache.tomcat:tomcat-jdbc"
+	testImplementation "org.grails.plugins:hibernate5"
+	testImplementation "com.h2database:h2"
+	testImplementation "org.apache.tomcat:tomcat-jdbc"
 
-    testImplementation "org.grails:grails-gorm-testing-support"
-    testImplementation "org.grails:grails-web-testing-support"
+	testImplementation "org.grails:grails-gorm-testing-support"
+	testImplementation "org.grails:grails-web-testing-support"
 }
 
 // Enable if you wish to package this plugin as a standalone application
@@ -46,12 +46,12 @@ bootJar.enabled = false
 
 //this makes the groovy docs much more readable by shorting packages and providing links
 groovydoc {
-    excludes = ['**/*GrailsPlugin.groovy','**/Application.groovy' ]
-    link('https://docs.oracle.com/en/java/javase/17/docs/api', 'java.', 'org.xml', 'org.xml.')
-    link('https://jakarta.ee/specifications/platform/9/apidocs', 'jakarta.')
-    link("https://docs.spring.io/spring/docs/6.1.x/javadoc-api", 'org.springframework')
-    link('https://docs.groovy-lang.org/4.0.24/html/gapi',  'groovy.', 'org.apache.groovy.')
-    link('https://docs.grails.org/7.0.0/api',  'grails.', 'org.grails.')
-    link('https://testing.grails.org/latest/api',  'grails.testing.', 'org.grails.testing.')
-    link('http://gorm.grails.org/9.0.x/hibernate/api/',  'grails.gorm', 'grails.orm', 'org.grails.datastore', 'org.grails.orm')
+	excludes = ['**/*GrailsPlugin.groovy', '**/Application.groovy']
+	link('https://docs.oracle.com/en/java/javase/17/docs/api', 'java.', 'org.xml', 'org.xml.')
+	link('https://jakarta.ee/specifications/platform/9/apidocs', 'jakarta.')
+	link("https://docs.spring.io/spring/docs/6.1.x/javadoc-api", 'org.springframework')
+	link('https://docs.groovy-lang.org/4.0.24/html/gapi', 'groovy.', 'org.apache.groovy.')
+	link('https://docs.grails.org/7.0.0/api', 'grails.', 'org.grails.')
+	link('https://testing.grails.org/latest/api', 'grails.testing.', 'org.grails.testing.')
+	link('http://gorm.grails.org/9.0.x/hibernate/api/', 'grails.gorm', 'grails.orm', 'org.grails.datastore', 'org.grails.orm')
 }
