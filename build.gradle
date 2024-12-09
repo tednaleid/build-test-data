@@ -1,9 +1,6 @@
 buildscript {
 	repositories {
-		mavenLocal()
-		mavenCentral()
 		maven { url "https://repo.grails.org/grails/core/" }
-		maven { url 'https://repo.grails.org/grails/libs-snapshots-local/' }
 	}
 	dependencies {
 		classpath "org.grails:grails-gradle-plugin:${grailsGradlePluginVersion}"
@@ -16,8 +13,6 @@ plugins {
 
 allprojects {
 	repositories {
-		mavenLocal()
-		mavenCentral()
 		maven { url "https://repo.grails.org/grails/core" }
 	}
 }
