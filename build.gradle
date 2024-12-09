@@ -74,3 +74,5 @@ subprojects {
 		}
 	}
 }
+
+apply from: rootProject.file("gradle/docs.gradle")

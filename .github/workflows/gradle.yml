@@ -63,10 +63,9 @@ jobs:
           MAVEN_PUBLISH_URL: ${{ secrets.MAVEN_PUBLISH_SNAPSHOT_URL }}
         working-directory: ./plugin
         run: ../gradlew publish
-      - name: "📜 Generate Documentation"
+      - name: "📜 Generate User Guide Documentation"
         if: success()
-        working-directory: ./plugin
-        run: ../gradlew docs
+        run: ./gradlew docs
       - name: "🚀 Publish to Github Pages"
         if: success()
         uses: micronaut-projects/github-pages-deploy-action@grails
@@ -75,7 +74,7 @@ jobs:
           TARGET_REPOSITORY: ${{ github.repository }}
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           BRANCH: gh-pages
-          FOLDER: plugin/build/docs
+          FOLDER: build/docs
           DOC_FOLDER: gh-pages
           COMMIT_EMAIL: ${{ env.GIT_USER_EMAIL }}
           COMMIT_NAME: ${{ env.GIT_USER_NAME }}

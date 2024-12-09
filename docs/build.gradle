@@ -31,25 +31,14 @@ def asciidoctorAttributes = [
 ]
 
 tasks.named('asciidoctor', AsciidoctorTask) { AsciidoctorTask it ->
+	it.jvm {
+		jvmArgs("--add-opens", "java.base/sun.nio.ch=ALL-UNNAMED", "--add-opens", "java.base/java.io=ALL-UNNAMED")
+	}
+
 	it.baseDirFollowsSourceDir()
 	it.sourceDir project.file('src/docs')
 	it.sources { include 'index.adoc' }
 	it.outputDir = project.buildDir.toPath().resolve('docs').toFile()
 	it.options doctype: 'book'
 	it.attributes asciidoctorAttributes
-}
-
-tasks.register('docs') {
-	group = JavaBasePlugin.DOCUMENTATION_GROUP
-	dependsOn = ['asciidoctor']
-	finalizedBy 'copyAsciiDoctorDocs'
-}
-
-tasks.register('copyAsciiDoctorDocs', Copy) {
-	group = JavaBasePlugin.DOCUMENTATION_GROUP
-	dependsOn = ['docs']
-	from "${rootProject.allprojects.find { it.name == 'docs' }.projectDir}/build"
-	includes = ['docs/**']
-	into rootProject.buildDir
-	includeEmptyDirs = false
 }
