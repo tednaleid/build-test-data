@@ -45,6 +45,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+      packages: write
     steps:
       - name: "📥 Checkout the repository"
         uses: actions/checkout@v4
