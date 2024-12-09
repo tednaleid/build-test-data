@@ -10,10 +10,10 @@ Under the GitHub project's `Settings` -> `Secrets and variables` -> `Actions`, t
   * `GH_TOKEN` - a valid GitHub Personal Access Token that can commit the version # to gradle.properties on releases.
   * `MAVEN_PUBLISH_SNAPSHOT_URL` - the GitHub package location.  See the GitHub [help documentation](https://docs.github.com/en/actions/use-cases-and-examples/publishing-packages/publishing-java-packages-with-gradle#publishing-packages-to-github-packages) for this value.
 * For releases:
-  * `SONATYPE_USERNAME` - The sonatype username that can access the `SONATYPE_NEXUS_URL`.
-  * `SONATYPE_PASSWORD` - The sonatype password that can access the `SONATYPE_NEXUS_URL`.
-  * `SONATYPE_NEXUS_URL` - The release url for Maven Central, typically `https://s01.oss.sonatype.org/service/local/`
-  * `SONATYPE_STAGING_PROFILE_ID` - The Nexus Staging Profile ID
+  * `NEXUS_PUBLISH_USERNAME` - The sonatype username that can access the `NEXUS_PUBLISH_URL`.
+  * `NEXUS_PUBLISH_PASSWORD` - The sonatype password that can access the `NEXUS_PUBLISH_URL`.
+  * `NEXUS_PUBLISH_URL` - The release url for Maven Central, typically `https://s01.oss.sonatype.org/service/local/`
+  * `NEXUS_PUBLISH_STAGING_PROFILE_ID` - The Nexus Staging Profile ID
   * `SIGNING_KEY` - The public key ID.
   * `SIGNING_PASSPHRASE` - The passphrase used while generating GnuPG key.
   * `SECRING_FILE` - The `secring.gpg` file contents for publishing to Maven Central.
