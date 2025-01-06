@@ -104,7 +104,8 @@ jobs:
     needs: [publish, release]
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: write # docs publishing
+      pages: write
     steps:
       - name: "📥 Checkout the repository"
         uses: actions/checkout@v4
@@ -127,7 +128,7 @@ jobs:
           # if multiple releases are being done, this is the last branch - 1 version
           #SKIP_LATEST: ${{ !startsWith(needs.publish.outputs.target_branch, '6.2') }}
           TARGET_REPOSITORY: ${{ github.repository }}
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH: gh-pages
           FOLDER: build/docs
           DOC_FOLDER: gh-pages
