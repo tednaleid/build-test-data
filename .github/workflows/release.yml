@@ -56,6 +56,10 @@ jobs:
           git tag -fa v${release_version} -m "Release v${release_version}"
           # Ensure the tag contains the release version
           git push origin v${release_version} --force
+          echo "Closing again the release after updating the tag"
+          export release_url=`cat $GITHUB_EVENT_PATH | jq '.release.url' | sed -e 's/^"\(.*\)"$/\1/g'`
+          echo $release_url
+          curl -s --request PATCH -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" -H "Content-Type: application/json" $release_url --data "{\"draft\": false}"
       - name: "🧩 Run Assemble"
         if: success()
         id: assemble

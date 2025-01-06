@@ -7,9 +7,10 @@ Required `Action` Secrets
 ---
 Under the GitHub project's `Settings` -> `Secrets and variables` -> `Actions`, the following `Repository secrets` should exist:
 * For snapshots:
-  * `GH_TOKEN` - a valid GitHub Personal Access Token that can commit the version # to gradle.properties on releases.
+  * `GH_TOKEN` - a valid GitHub Personal Access Token that can commit to gh-pages to deploy documentation
   * `MAVEN_PUBLISH_SNAPSHOT_URL` - the GitHub package location.  See the GitHub [help documentation](https://docs.github.com/en/actions/use-cases-and-examples/publishing-packages/publishing-java-packages-with-gradle#publishing-packages-to-github-packages) for this value.
 * For releases:
+  * `GH_TOKEN` - a valid GitHub Personal Access Token that can commit to gh-pages to deploy documentation & update releases
   * `NEXUS_PUBLISH_USERNAME` - The sonatype username that can access the `NEXUS_PUBLISH_URL`.
   * `NEXUS_PUBLISH_PASSWORD` - The sonatype password that can access the `NEXUS_PUBLISH_URL`.
   * `NEXUS_PUBLISH_URL` - The release url for Maven Central, typically `https://s01.oss.sonatype.org/service/local/`
