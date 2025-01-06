@@ -53,7 +53,15 @@ jobs:
           java-version: '17'
       - name: "🐘 Setup Gradle"
         uses: gradle/actions/setup-gradle@v4
+      - name: Read project version
+        id: version
+        run: |
+          # Extract the version from the property file.
+          version=$(grep '^projectVersion=' gradle.properties | cut -d= -f2)
+          echo "version=$version" >> $GITHUB_OUTPUT
+        shell: bash
       - name: "📤 Publish to Snapshot"
+        if: ${{ success() && endsWith( steps.version.outputs.version, '-SNAPSHOT' ) }}
         env:
           MAVEN_PUBLISH_USERNAME: ${{ secrets.GITHUB_ACTOR }}
           MAVEN_PUBLISH_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
@@ -65,7 +73,7 @@ jobs:
         if: success()
         run: ./gradlew docs
       - name: "🚀 Publish to Github Pages"
-        if: success()
+        if: ${{ success() && endsWith( steps.version.outputs.version, '-SNAPSHOT' ) }}
         uses: micronaut-projects/github-pages-deploy-action@grails
         env:
           SKIP_SNAPSHOT: ${{ contains(needs.publish.outputs.release_version, 'M') }}
