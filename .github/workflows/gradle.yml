@@ -58,6 +58,7 @@ jobs:
           MAVEN_PUBLISH_USERNAME: ${{ secrets.GITHUB_ACTOR }}
           MAVEN_PUBLISH_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
           MAVEN_PUBLISH_URL: ${{ secrets.MAVEN_PUBLISH_SNAPSHOT_URL }}
+          GRAILS_PUBLISH_RELEASE: "false"
         working-directory: ./plugin
         run: ../gradlew publish
       - name: "📜 Generate User Guide Documentation"
