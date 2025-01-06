@@ -47,7 +47,7 @@ jobs:
           SECRING_FILE: ${{ secrets.SECRING_FILE }}
         run: echo $SECRING_FILE | base64 -d > ${{ github.workspace }}/secring.gpg
       - name: "🚀 Publish to Sonatype OSSRH"
-        if: false # success()
+        if: success()
         id: publish
         env:
           NEXUS_PUBLISH_USERNAME: ${{ secrets.NEXUS_PUBLISH_USERNAME }}
@@ -84,7 +84,7 @@ jobs:
       - name: "🐘 Setup Gradle"
         uses: gradle/actions/setup-gradle@v4
       - name: "🏆Nexus Staging Close And Release"
-        if: false # success()
+        if: success()
         env:
           NEXUS_PUBLISH_USERNAME: ${{ secrets.NEXUS_PUBLISH_USERNAME }}
           NEXUS_PUBLISH_PASSWORD: ${{ secrets.NEXUS_PUBLISH_PASSWORD }}
