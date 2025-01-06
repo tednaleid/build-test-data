@@ -82,6 +82,7 @@ jobs:
           publishToSonatype 
           closeSonatypeStagingRepository
   release:
+    environment: production
     needs: publish
     runs-on: ubuntu-latest
     permissions:
@@ -134,7 +135,7 @@ jobs:
           git commit -m "chore: Bump version to ${next_version}$SNAPSHOT_SUFFIX"
           git push origin $target_branch
   docs:
-    needs: publish
+    needs: [publish, release]
     runs-on: ubuntu-latest
     permissions:
       contents: write
