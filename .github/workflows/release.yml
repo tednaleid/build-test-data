@@ -9,7 +9,6 @@ jobs:
   publish:
     permissions:
       contents: write  #  to create release
-      issues: write  #  to modify milestones
     runs-on: ubuntu-latest
     outputs:
       release_version: ${{ steps.release_version.outputs.value }}
@@ -36,10 +35,30 @@ jobs:
       - name: "📝Set the current release version"
         id: release_version
         run: echo "value=${GITHUB_REF:11}" >> $GITHUB_OUTPUT
-      - name: "⚙️ Run pre-release"
-        uses: micronaut-projects/github-actions/pre-release@master
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: "⚙️ Set release in gradle.properties & tag"
+        run: |
+          # Setup Git Repo
+          git config --global --add safe.directory /github/workspace
+          git config --global user.email "$GIT_USER_EMAIL"
+          git config --global user.name "$GIT_USER_NAME"
+          git fetch
+          export target_branch='${{ steps.extract_branch.outputs.value }}'
+          echo "Using Target Branch: ${target_branch}"
+          git checkout $target_branch
+          # Set the release version in gradle.properties
+          export release_version='${{ steps.release_version.outputs.value }}'
+          echo "Setting release version to '${release_version}' in gradle.properties"
+          sed -i "s/^projectVersion.*$/projectVersion\=${release_version}/" gradle.properties
+          cat gradle.properties
+          # Commit the release version change
+          echo "Pushing release version and recreating v${release_version} tag"
+          git add gradle.properties
+          git commit -m "[skip ci] Release v${release_version}"
+          git push origin $target_branch
+          git tag -fa v${release_version} -m "Release v${release_version}"
+          git push origin $target_branch
+          # Ensure the tag contains the release version
+          git push origin v${release_version} --force
       - name: "🧩 Run Assemble"
         if: success()
         id: assemble
@@ -58,7 +77,6 @@ jobs:
           SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
           SIGNING_PASSPHRASE: ${{ secrets.SIGNING_PASSPHRASE }}
           SECRING_FILE: ${{ secrets.SECRING_FILE }}
-        working-directory: ./plugin
         run: >
           ../gradlew
           -Psigning.secretKeyRingFile=${{ github.workspace }}/secring.gpg 
@@ -90,18 +108,32 @@ jobs:
           NEXUS_PUBLISH_PASSWORD: ${{ secrets.NEXUS_PUBLISH_PASSWORD }}
           NEXUS_PUBLISH_URL: ${{ secrets.NEXUS_PUBLISH_URL }}
           NEXUS_PUBLISH_STAGING_PROFILE_ID: ${{ secrets.NEXUS_PUBLISH_STAGING_PROFILE_ID }}
-        working-directory: ./plugin
         run: >
           ../gradlew
           findSonatypeStagingRepository
           releaseSonatypeStagingRepository
-      - name: "⚙️Run post-release"
+      - name: "⚙️Back to snapshot"
         if: success()
-        uses: micronaut-projects/github-actions/post-release@master
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-        env:
-          SNAPSHOT_SUFFIX: -SNAPSHOT
+        run: |
+          echo -n "Determining next version: "
+          next_version=`bin/increment_version.sh -p '${{ steps.release_version.outputs.value }}'`
+          echo $next_version
+          echo "next_version=${next_version}" >> $GITHUB_OUTPUT
+          echo "Configuring git"
+          git config --global --add safe.directory /github/workspace
+          git config --global user.email "$GIT_USER_EMAIL"
+          git config --global user.name "$GIT_USER_NAME"
+          git fetch
+          export target_branch='${{ steps.extract_branch.outputs.value }}'
+          echo "Using Target Branch: ${target_branch}"
+          git checkout $target_branch
+          echo "Setting new snapshot version"
+          sed -i "s/^projectVersion.*$/projectVersion\=${next_version}-SNAPSHOT/" gradle.properties
+          cat gradle.properties
+          echo "Committing and pushing"
+          git add gradle.properties
+          git commit -m "chore: Bump version to ${next_version}$SNAPSHOT_SUFFIX"
+          git push origin $target_branch
   docs:
     needs: publish
     runs-on: ubuntu-latest
