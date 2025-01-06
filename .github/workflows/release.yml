@@ -65,10 +65,12 @@ jobs:
         id: assemble
         run: ./gradlew assemble
       - name: "🔐 Generate secring file"
+        if: success()
         env:
           SECRING_FILE: ${{ secrets.SECRING_FILE }}
         run: echo $SECRING_FILE | base64 -d > ${{ github.workspace }}/secring.gpg
       - name: "🚀 Publish to Sonatype OSSRH"
+        if: success()
         id: publish
         env:
           NEXUS_PUBLISH_USERNAME: ${{ secrets.NEXUS_PUBLISH_USERNAME }}
