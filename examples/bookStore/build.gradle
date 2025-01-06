@@ -59,8 +59,9 @@ dependencies {
 	testImplementation project(':build-test-data')
 }
 
-assets {
-	minifyJs = true
-	minifyCss = true
-}
+// No assets in test project
+//assets {
+//	minifyJs = true
+//	minifyCss = true
+//}
 

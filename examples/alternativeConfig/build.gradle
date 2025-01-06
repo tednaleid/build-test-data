@@ -61,7 +61,8 @@ dependencies {
 	testImplementation("org.spockframework:spock-core")
 }
 
-assets {
-	minifyJs = true
-	minifyCss = true
-}
+// No assets in test project
+//assets {
+//	minifyJs = true
+//	minifyCss = true
+//}
