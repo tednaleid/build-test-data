@@ -13,7 +13,8 @@ plugins {
 	id "org.grails.grails-gsp"
 	id "war"
 	id "idea"
-	id "com.bertramlabs.asset-pipeline" version "${assetPipelineVersion}"
+	// Not needed because no /assets directory
+	// id "com.bertramlabs.asset-pipeline" version "${assetPipelineVersion}"
 	id "eclipse"
 }
 
