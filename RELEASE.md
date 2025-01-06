@@ -49,7 +49,7 @@ To perform a release:
   * (#1) Publish Job:
     * Perform `pre-release` steps:
       * Changes `gradle.properties` projectVersion based on the release.
-      * Commits the change using the configured `GH_TOKEN`
+      * Commits the change
     * Builds the project
     * Publishes to the Staging repository and closes the staging repository.
   * (#2) Release Job:
@@ -61,4 +61,4 @@ To perform a release:
       * Commits the `gradle.properties` changes using the configured `GH_TOKEN`
   * (#3) Documentation:
     * Generates the documentation
-    * Publishes the documentation
+    * Publishes the documentation using the configured `GH_TOKEN`
