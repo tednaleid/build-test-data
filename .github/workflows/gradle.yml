@@ -74,7 +74,7 @@ jobs:
         run: ./gradlew docs
       - name: "🚀 Publish to Github Pages"
         if: ${{ success() && endsWith( steps.version.outputs.version, '-SNAPSHOT' ) }}
-        uses: micronaut-projects/github-pages-deploy-action@grails
+        uses: ./.github/actions/pages-deploy
         env:
           SKIP_SNAPSHOT: ${{ contains(needs.publish.outputs.release_version, 'M') }}
           TARGET_REPOSITORY: ${{ github.repository }}

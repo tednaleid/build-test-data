@@ -8,7 +8,7 @@ env:
 jobs:
   publish:
     permissions:
-      contents: write  #  to create release
+      contents: write  #  to update gradle.properties
     runs-on: ubuntu-latest
     outputs:
       release_version: ${{ steps.release_version.outputs.value }}
@@ -34,32 +34,9 @@ jobs:
         id: release_version
         run: echo "value=${GITHUB_REF:11}" >> $GITHUB_OUTPUT
       - name: "⚙️ Set release in gradle.properties & tag"
-        run: |
-          # Setup Git Repo
-          git config --global --add safe.directory /github/workspace
-          git config --global user.email "$GIT_USER_EMAIL"
-          git config --global user.name "$GIT_USER_NAME"
-          git fetch
-          export target_branch='${{ steps.extract_branch.outputs.value }}'
-          echo "Using Target Branch: ${target_branch}"
-          git checkout $target_branch
-          # Set the release version in gradle.properties
-          export release_version='${{ steps.release_version.outputs.value }}'
-          echo "Setting release version to '${release_version}' in gradle.properties"
-          sed -i "s/^projectVersion.*$/projectVersion\=${release_version}/" gradle.properties
-          cat gradle.properties
-          # Commit the release version change
-          echo "Pushing release version and recreating v${release_version} tag"
-          git add gradle.properties
-          git commit -m "[skip ci] Release v${release_version}"
-          git push origin $target_branch
-          git tag -fa v${release_version} -m "Release v${release_version}"
-          # Ensure the tag contains the release version
-          git push origin v${release_version} --force
-          echo "Closing again the release after updating the tag"
-          export release_url=`cat $GITHUB_EVENT_PATH | jq '.release.url' | sed -e 's/^"\(.*\)"$/\1/g'`
-          echo $release_url
-          curl -s --request PATCH -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" -H "Content-Type: application/json" $release_url --data "{\"draft\": false}"
+        uses: ./.github/actions/pre-release
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
       - name: "🧩 Run Assemble"
         if: success()
         id: assemble
@@ -91,7 +68,7 @@ jobs:
     needs: publish
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write # allow snapshot version changes
     steps:
       - name: "📥 Checkout repository"
         uses: actions/checkout@v4
@@ -120,26 +97,9 @@ jobs:
           releaseSonatypeStagingRepository
       - name: "⚙️Back to snapshot"
         if: success()
-        run: |
-          echo -n "Determining next version: "
-          next_version=`bin/increment_version.sh -p '${{ steps.release_version.outputs.value }}'`
-          echo $next_version
-          echo "next_version=${next_version}" >> $GITHUB_OUTPUT
-          echo "Configuring git"
-          git config --global --add safe.directory /github/workspace
-          git config --global user.email "$GIT_USER_EMAIL"
-          git config --global user.name "$GIT_USER_NAME"
-          git fetch
-          export target_branch='${{ steps.extract_branch.outputs.value }}'
-          echo "Using Target Branch: ${target_branch}"
-          git checkout $target_branch
-          echo "Setting new snapshot version"
-          sed -i "s/^projectVersion.*$/projectVersion\=${next_version}-SNAPSHOT/" gradle.properties
-          cat gradle.properties
-          echo "Committing and pushing"
-          git add gradle.properties
-          git commit -m "chore: Bump version to ${next_version}$SNAPSHOT_SUFFIX"
-          git push origin $target_branch
+        uses: ./.github/actions/post-release
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
   docs:
     needs: [publish, release]
     runs-on: ubuntu-latest
@@ -161,7 +121,7 @@ jobs:
         run: ./gradlew docs
       - name: "🚀 Publish to Github Pages"
         if: success()
-        uses: grails/github-pages-deploy-action@v2
+        uses: ./.github/actions/pages-deploy
         env:
           SKIP_SNAPSHOT: ${{ contains(needs.publish.outputs.release_version, 'M') }}
           # if multiple releases are being done, this is the last branch - 1 version
