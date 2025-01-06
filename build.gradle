@@ -53,6 +53,7 @@ subprojects {
 		apply plugin: "org.grails.grails-publish"
 		grailsPublish {
 			githubSlug = 'jdaugherty/build-test-data'
+			artifactId = 'build-test-data'
 			groupId = 'io.github.jdaugherty'
 			license {
 				name = 'Apache-2.0'
