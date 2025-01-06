@@ -22,7 +22,7 @@ def asciidoctorAttributes = [
 		idprefix            : '',
 		idseparator         : '-',
 		version             : project.version,
-		projectUrl          : "https://github.com/jdaugherty/build-test-data",
+		projectUrl          : "https://github.com/longwa/build-test-data",
 		sourcedir           : "${rootProject.allprojects.find { it.name == 'build-test-data' }.projectDir}/src/main/groovy",
 		gormDetailedLink    : "https://gorm.grails.org/${getGrailsDocumentationVersion(project['gorm.version'] as String)}/hibernate/manual/index.html",
 		gormSummaryLink     : "https://docs.grails.org/${getGrailsDocumentationVersion(project.grailsVersion)}/guide/GORM.html",

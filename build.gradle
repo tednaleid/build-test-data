@@ -18,11 +18,11 @@ allprojects {
 }
 
 version project.projectVersion
-group 'io.github.jdaugherty'
+group 'io.github.longwa'
 
 subprojects {
 	version project.projectVersion
-	group 'io.github.jdaugherty'
+	group 'io.github.longwa'
 
 	apply plugin: 'groovy'
 
@@ -54,9 +54,9 @@ subprojects {
 	if (project.name == 'build-test-data') {
 		apply plugin: "org.grails.grails-publish"
 		grailsPublish {
-			githubSlug = 'jdaugherty/build-test-data'
+			githubSlug = 'longwa/build-test-data'
 			artifactId = 'build-test-data'
-			groupId = 'io.github.jdaugherty'
+			groupId = 'io.github.longwa'
 			license {
 				name = 'Apache-2.0'
 			}

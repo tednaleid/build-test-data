@@ -3,8 +3,8 @@ on:
   release:
     types: [published]
 env:
-  GIT_USER_NAME: 'jdaugherty'
-  GIT_USER_EMAIL: 'jdaugherty@users.noreply.github.com'
+  GIT_USER_NAME: 'longwa'
+  GIT_USER_EMAIL: 'longwa@users.noreply.github.com'
 jobs:
   publish:
     permissions:

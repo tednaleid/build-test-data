@@ -1,12 +1,12 @@
 Build Test Data
 ===
-[![Java CI](https://github.com/jdaugherty/build-test-data/actions/workflows/gradle.yml/badge.svg?event=push)](https://github.com/jdaugherty/build-test-data/actions/workflows/gradle.yml)
+[![Java CI](https://github.com/longwa/build-test-data/actions/workflows/gradle.yml/badge.svg?event=push)](https://github.com/longwa/build-test-data/actions/workflows/gradle.yml)
 
 ## Build Test Data Grails Plugin
 ### Grails 7.x or later
-`testImplementation 'io.github.jdaugherty:build-test-data:6.0.0'`
+`testImplementation 'io.github.longwa:build-test-data:6.0.0'`
 
-http://jdaugherty.github.io/build-test-data/index
+http://longwa.github.io/build-test-data/index
 
 ### Grails 5.x through 6.x
 `testImplementation 'io.github.longwa:build-test-data:5.0.0'`
