@@ -18,9 +18,11 @@ allprojects {
 }
 
 version project.projectVersion
+group 'io.github.jdaugherty'
 
 subprojects {
 	version project.projectVersion
+	group 'io.github.jdaugherty'
 
 	apply plugin: 'groovy'
 
