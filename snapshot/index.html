@@ -555,11 +555,12 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 </li>
 <li><a href="#installation">4. Installation</a>
 <ul class="sectlevel2">
-<li><a href="#grails-5-0-or-later">4.1. Grails 5.0 or later</a></li>
-<li><a href="#grails-4-0">4.2. Grails 4.0</a></li>
-<li><a href="#grails-3-3">4.3. Grails 3.3</a></li>
-<li><a href="#grails-3-1-and-3-2">4.4. Grails 3.1 and 3.2</a></li>
-<li><a href="#grails-2-x">4.5. Grails 2.x</a></li>
+<li><a href="#grails-7-0-or-later">4.1. Grails 7.0 or later</a></li>
+<li><a href="#grails-5-0-or-grails-6-0">4.2. Grails 5.0 or Grails 6.0</a></li>
+<li><a href="#grails-4-0">4.3. Grails 4.0</a></li>
+<li><a href="#grails-3-3">4.4. Grails 3.3</a></li>
+<li><a href="#grails-3-1-and-3-2">4.5. Grails 3.1 and 3.2</a></li>
+<li><a href="#grails-2-x">4.6. Grails 2.x</a></li>
 </ul>
 </li>
 <li><a href="#upgrading">5. Upgrading</a>
@@ -874,25 +875,31 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <p>Unfortunately, this makes it impossible to have one plugin which is compatible with all prior versions.</p>
 </div>
 <div class="sect2">
-<h3 id="grails-5-0-or-later">4.1. Grails 5.0 or later</h3>
+<h3 id="grails-7-0-or-later">4.1. Grails 7.0 or later</h3>
 <div class="paragraph">
-<p><code>testImplementation "io.github.jdaugherty:build-test-data:6.0.0-SNAPSHOT"</code></p>
+<p><code>testImplementation "io.github.longwa:build-test-data:6.0.0-SNAPSHOT"</code></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="grails-4-0">4.2. Grails 4.0</h3>
+<h3 id="grails-5-0-or-grails-6-0">4.2. Grails 5.0 or Grails 6.0</h3>
+<div class="paragraph">
+<p><code>testImplementation "io.github.longwa:build-test-data:5.0.0"</code></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="grails-4-0">4.3. Grails 4.0</h3>
 <div class="paragraph">
 <p><code>testCompile "org.grails.plugins:build-test-data:4.0.0"</code></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="grails-3-3">4.3. Grails 3.3</h3>
+<h3 id="grails-3-3">4.4. Grails 3.3</h3>
 <div class="paragraph">
 <p><code>testCompile "org.grails.plugins:build-test-data:3.3.1"</code></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="grails-3-1-and-3-2">4.4. Grails 3.1 and 3.2</h3>
+<h3 id="grails-3-1-and-3-2">4.5. Grails 3.1 and 3.2</h3>
 <div class="paragraph">
 <p><code>testCompile "org.grails.plugins:build-test-data:3.0.1"</code></p>
 </div>
@@ -910,14 +917,14 @@ Version 3.0.x is required for Grails versions 3.0 through 3.2
 </div>
 <div class="paragraph">
 <p>See the legacy Wiki documentation for details:
-<a href="https://github.com/jdaugherty/build-test-data/wiki" class="bare">https://github.com/jdaugherty/build-test-data/wiki</a></p>
+<a href="https://github.com/longwa/build-test-data/wiki" class="bare">https://github.com/longwa/build-test-data/wiki</a></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="grails-2-x">4.5. Grails 2.x</h3>
+<h3 id="grails-2-x">4.6. Grails 2.x</h3>
 <div class="paragraph">
 <p>See the legacy Wiki documentation for details:
-<a href="https://github.com/jdaugherty/build-test-data/wiki" class="bare">https://github.com/jdaugherty/build-test-data/wiki</a></p>
+<a href="https://github.com/longwa/build-test-data/wiki" class="bare">https://github.com/longwa/build-test-data/wiki</a></p>
 </div>
 </div>
 </div>
@@ -2003,7 +2010,7 @@ assertEquals <span class="integer">1</span>, Issue.list().size()</code></pre>
 <div id="footer">
 <div id="footer-text">
 Version 6.0.0-SNAPSHOT<br>
-Last updated 2025-01-06 20:36:57 UTC
+Last updated 2025-01-08 20:48:28 UTC
 </div>
 </div>
 </body>
