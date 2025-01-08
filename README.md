@@ -4,7 +4,7 @@ Build Test Data
 
 ## Build Test Data Grails Plugin
 ### Grails 7.x or later
-`testImplementation 'io.github.longwa:build-test-data:6.0.0'`
+`testImplementation 'io.github.longwa:build-test-data:6.0.0-M1'`
 
 http://longwa.github.io/build-test-data/index
 
