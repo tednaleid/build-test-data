@@ -1,7 +1,14 @@
-[![Build Status](https://api.travis-ci.org/longwa/build-test-data.png?branch=master)](https://travis-ci.org/longwa/build-test-data)
+Build Test Data
+===
+[![Java CI](https://github.com/longwa/build-test-data/actions/workflows/gradle.yml/badge.svg?event=push)](https://github.com/longwa/build-test-data/actions/workflows/gradle.yml)
 
 ## Build Test Data Grails Plugin
-### Grails 5.x or later
+### Grails 7.x or later
+`testImplementation 'io.github.longwa:build-test-data:6.0.0'`
+
+http://longwa.github.io/build-test-data/index
+
+### Grails 5.x through 6.x
 `testImplementation 'io.github.longwa:build-test-data:5.0.0'`
 
 _Note: The Group ID has changed but the internal package name remains grails.buildtestdata.*_

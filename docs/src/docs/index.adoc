@@ -1,5 +1,6 @@
 = Build Test Data Users Guide
-{version}
+:source-highlighter: coderay
+:numbered:
 
 include::introduction.adoc[]
 include::methodology.adoc[]

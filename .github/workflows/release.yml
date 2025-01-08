@@ -1,0 +1,137 @@
+name: "Release"
+on:
+  release:
+    types: [published]
+env:
+  GIT_USER_NAME: 'longwa'
+  GIT_USER_EMAIL: 'longwa@users.noreply.github.com'
+jobs:
+  publish:
+    permissions:
+      contents: write  #  to update gradle.properties
+    runs-on: ubuntu-latest
+    outputs:
+      release_version: ${{ steps.release_version.outputs.value }}
+      target_branch: ${{ steps.extract_branch.outputs.value }}
+    steps:
+      - name: "📥 Checkout the repository"
+        uses: actions/checkout@v4
+      - name: "☕️ Setup JDK"
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'liberica'
+          java-version: '17'
+      - name: "🐘 Setup Gradle"
+        uses: gradle/actions/setup-gradle@v4
+      - name: "📝 Store the target branch"
+        id: extract_branch
+        run: |
+          echo "Determining Target Branch"
+          TARGET_BRANCH=${GITHUB_REF#refs/heads/}
+          echo $TARGET_BRANCH
+          echo "value=${TARGET_BRANCH}" >> $GITHUB_OUTPUT
+      - name: "📝Set the current release version"
+        id: release_version
+        run: echo "value=${GITHUB_REF:11}" >> $GITHUB_OUTPUT
+      - name: "⚙️ Set release in gradle.properties & tag"
+        uses: ./.github/actions/pre-release
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: "🧩 Run Assemble"
+        if: success()
+        id: assemble
+        run: ./gradlew assemble
+      - name: "🔐 Generate secring file"
+        if: success()
+        env:
+          SECRING_FILE: ${{ secrets.SECRING_FILE }}
+        run: echo $SECRING_FILE | base64 -d > ${{ github.workspace }}/secring.gpg
+      - name: "🚀 Publish to Sonatype OSSRH"
+        if: success()
+        id: publish
+        env:
+          NEXUS_PUBLISH_USERNAME: ${{ secrets.NEXUS_PUBLISH_USERNAME }}
+          NEXUS_PUBLISH_PASSWORD: ${{ secrets.NEXUS_PUBLISH_PASSWORD }}
+          NEXUS_PUBLISH_URL: ${{ secrets.NEXUS_PUBLISH_URL }}
+          NEXUS_PUBLISH_STAGING_PROFILE_ID: ${{ secrets.NEXUS_PUBLISH_STAGING_PROFILE_ID }}
+          SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
+          SIGNING_PASSPHRASE: ${{ secrets.SIGNING_PASSPHRASE }}
+          SECRING_FILE: ${{ secrets.SECRING_FILE }}
+          GRAILS_PUBLISH_RELEASE: "true"
+        run: >
+          ./gradlew
+          -Psigning.secretKeyRingFile=${{ github.workspace }}/secring.gpg 
+          publishToSonatype 
+          closeSonatypeStagingRepository
+  release:
+    environment: production
+    needs: publish
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # allow snapshot version changes
+    steps:
+      - name: "📥 Checkout repository"
+        uses: actions/checkout@v4
+      - name: "☕️ Setup JDK"
+        uses: actions/setup-java@v4
+        with:
+          distribution: liberica
+          java-version: 17
+      - name: "📥 Checkout repository"
+        uses: actions/checkout@v4
+        with:
+          ref: v${{ needs.publish.outputs.release_version }}
+      - name: "🐘 Setup Gradle"
+        uses: gradle/actions/setup-gradle@v4
+      - name: "🏆Nexus Staging Close And Release"
+        if: success()
+        env:
+          NEXUS_PUBLISH_USERNAME: ${{ secrets.NEXUS_PUBLISH_USERNAME }}
+          NEXUS_PUBLISH_PASSWORD: ${{ secrets.NEXUS_PUBLISH_PASSWORD }}
+          NEXUS_PUBLISH_URL: ${{ secrets.NEXUS_PUBLISH_URL }}
+          NEXUS_PUBLISH_STAGING_PROFILE_ID: ${{ secrets.NEXUS_PUBLISH_STAGING_PROFILE_ID }}
+          GRAILS_PUBLISH_RELEASE: "true"
+        run: >
+          ./gradlew
+          findSonatypeStagingRepository
+          releaseSonatypeStagingRepository
+      - name: "⚙️Back to snapshot"
+        if: success()
+        uses: ./.github/actions/post-release
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+  docs:
+    needs: [publish, release]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # docs publishing
+      pages: write
+    steps:
+      - name: "📥 Checkout the repository"
+        uses: actions/checkout@v4
+        with:
+          ref: v${{ needs.publish.outputs.release_version }}
+      - name: "☕️ Setup JDK"
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'liberica'
+          java-version: '17'
+      - name: "🐘 Setup Gradle"
+        uses: gradle/actions/setup-gradle@v4
+      - name: "📜 Generate User Guide Documentation"
+        run: ./gradlew docs
+      - name: "🚀 Publish to Github Pages"
+        if: success()
+        uses: ./.github/actions/pages-deploy
+        env:
+          SKIP_SNAPSHOT: ${{ contains(needs.publish.outputs.release_version, 'M') }}
+          # if multiple releases are being done, this is the last branch - 1 version
+          #SKIP_LATEST: ${{ !startsWith(needs.publish.outputs.target_branch, '6.2') }}
+          TARGET_REPOSITORY: ${{ github.repository }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: gh-pages
+          FOLDER: build/docs
+          DOC_FOLDER: gh-pages
+          COMMIT_EMAIL: ${{ env.GIT_USER_EMAIL }}
+          COMMIT_NAME: ${{ env.GIT_USER_NAME }}
+          VERSION: ${{ needs.publish.outputs.release_version }}

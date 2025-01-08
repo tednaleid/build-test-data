@@ -1,0 +1,85 @@
+name: "Java CI"
+on:
+  push:
+    branches:
+      - '[5-9].[0-9].x'
+  pull_request:
+    types: [ opened, reopened, synchronize ]
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java: ['17', '21']
+    steps:
+      - name: "📥 Checkout the repository"
+        uses: actions/checkout@v4
+      - name: "☕️ Setup JDK"
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'liberica'
+          java-version: ${{ matrix.java }}
+      - name: "🐘 Setup Gradle"
+        uses: gradle/actions/setup-gradle@v4
+      - name: "🔨 Run Base Tests"
+        run: ./gradlew check --continue
+      - name: "📤️ Upload Base Tests Results - alternativeConfig"
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: testreport-alternativeConfig-${{ matrix.java }}
+          path: examples/alternativeConfig/build/reports/tests
+      - name: "📤 Upload Base Tests Results - bookStore"
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: testreport-bookStore-${{ matrix.java }}
+          path: examples/bookStore/build/reports/tests
+  publish:
+    if: github.event_name == 'push'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # publishing docs
+      packages: write
+      pages: write
+    steps:
+      - name: "📥 Checkout the repository"
+        uses: actions/checkout@v4
+      - name: "☕️ Setup JDK"
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'liberica'
+          java-version: '17'
+      - name: "🐘 Setup Gradle"
+        uses: gradle/actions/setup-gradle@v4
+      - name: Read project version
+        id: version
+        run: |
+          # Extract the version from the property file.
+          version=$(grep '^projectVersion=' gradle.properties | cut -d= -f2)
+          echo "version=$version" >> $GITHUB_OUTPUT
+        shell: bash
+      - name: "📤 Publish to Snapshot"
+        if: ${{ success() && endsWith( steps.version.outputs.version, '-SNAPSHOT' ) }}
+        env:
+          MAVEN_PUBLISH_USERNAME: ${{ secrets.GITHUB_ACTOR }}
+          MAVEN_PUBLISH_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+          MAVEN_PUBLISH_URL: ${{ secrets.MAVEN_PUBLISH_SNAPSHOT_URL }}
+          GRAILS_PUBLISH_RELEASE: "false"
+        working-directory: ./plugin
+        run: ../gradlew publish
+      - name: "📜 Generate User Guide Documentation"
+        if: success()
+        run: ./gradlew docs
+      - name: "🚀 Publish to Github Pages"
+        if: ${{ success() && endsWith( steps.version.outputs.version, '-SNAPSHOT' ) }}
+        uses: ./.github/actions/pages-deploy
+        env:
+          SKIP_SNAPSHOT: ${{ contains(needs.publish.outputs.release_version, 'M') }}
+          TARGET_REPOSITORY: ${{ github.repository }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: gh-pages
+          FOLDER: build/docs
+          DOC_FOLDER: gh-pages

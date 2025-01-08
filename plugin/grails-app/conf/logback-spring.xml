@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <statusListener class="ch.qos.logback.core.status.NopStatusListener" />
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+    <root level="ERROR">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+
+
+    <!--    logging to a file-->
+    <!--    <property name="LOG_FILE" value="${LOG_FILE:-${LOG_PATH:-${LOG_TEMP:-${java.io.tmpdir:-/tmp}}/}spring.log}"/>-->
+    <!--    <include resource="org/springframework/boot/logging/logback/file-appender.xml" />-->
+    <!--    <root level="INFO">-->
+    <!--        <appender-ref ref="FILE" />-->
+    <!--    </root>-->
+
+    <!--    add logging.file.name to application.yml-->
+
+    <springProfile name="development">
+        <logger name="StackTrace" level="ERROR" additivity="false"/>
+        <logger name="ahr" level="DEBUG"/>
+        <logger name="ahr" level="DEBUG"/>
+        <logger name="io.awspring.cloud" level="DEBUG"/>
+        <logger name="grails.spring.BeanBuilder" level="DEBUG"/>
+        <logger name="org.hibernate.orm.deprecation" level="OFF"/> <!--HHH90000022: Hibernate's legacy org.hibernate.Criteria API is deprecated-->
+        <logger name="grails.boot" level="DEBUG"/>
+
+        <!--        <logger name="org.hibernate.SQL" level="DEBUG"/>-->
+        <!--        <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="TRACE"/>-->
+        <root level="WARN"/>
+    </springProfile>
+</configuration>

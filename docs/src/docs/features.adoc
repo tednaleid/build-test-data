@@ -1,0 +1,35 @@
+[[features]]
+== Features
+Auto generation of grails property types, including:
+
+- {gormSummaryLink}[Domain objects] using one-to-one, one-to-many, and many-to-many relationships.
+- {gormSummaryLink}[Embedded domain objects]
+- String
+- Date
+- Boolean
+- Numbers (Integer, Long, Float, Short, etc)
+- Byte
+- JodaTime classes
+- Any persistable class with a zero-argument constructor
+
+=== Supported Constraints
+- {grailsDocBase}/ref/Constraints/nullable.html[nullable]
+- {grailsDocBase}/ref/Constraints/blank.html[blank]
+- {grailsDocBase}/ref/Constraints/creditCard.html[creditCard]
+- {grailsDocBase}/ref/Constraints/email.html[email]
+- {grailsDocBase}/ref/Constraints/inList.html[inList]
+- {grailsDocBase}/ref/Constraints/max.html[max]
+- {grailsDocBase}/ref/Constraints/maxSize.html[maxSize]
+- {grailsDocBase}/ref/Constraints/min.html[min]
+- {grailsDocBase}/ref/Constraints/minSize.html[minSize]
+- {grailsDocBase}/ref/Constraints/range.html[range]
+- {grailsDocBase}/ref/Constraints/size.html[size]
+- {grailsDocBase}/ref/Constraints/url.html[url]
+- {grailsDocBase}/ref/Constraints/matches.html[matches]
+
+=== Unsupported Constraints
+- {grailsDocBase}/ref/Constraints/scale.html[scale]
+- {grailsDocBase}/ref/Constraints/validator.html[validator] - custom validators can have all kinds of business logic in them and there isn't a programmatic way to interrogate this.  If the test value that's tried doesn't pass your logic, you'll need to provide a value, or mock out the calls that the validator makes so that it passes.
+- {grailsDocBase}/ref/Constraints/unique.html[unique] - not directly supported but it's possible to specify your own unique value in a config file as demonstrated on the link:examples[Examples] page.
+- {grailsDocBase}/ref/Constraints/notEqual.html[notEqual] - unlikely that our test data would match this, could be supported in the future
+
